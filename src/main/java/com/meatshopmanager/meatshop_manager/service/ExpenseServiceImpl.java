@@ -30,4 +30,20 @@ public class ExpenseServiceImpl implements ExpenseService{
         return repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Expense not found"));
     }
+    @Override
+    public Expense update(Long id, Expense expense){
+        Expense existing = findById(id);
+
+        existing.setDescription(expense.getDescription());
+        existing.setCategory(expense.getCategory());
+        existing.setAmount(expense.getAmount());
+        existing.setExpenseDate(expense.getExpenseDate());
+        
+        return repository.save(existing);
+    }
+
+    @Override
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }
 }
