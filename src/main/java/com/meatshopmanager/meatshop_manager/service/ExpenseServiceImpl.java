@@ -2,7 +2,9 @@ package com.meatshopmanager.meatshop_manager.service;
 
 import com.meatshopmanager.meatshop_manager.model.Expense;
 import com.meatshopmanager.meatshop_manager.repository.ExpenseRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -28,7 +30,12 @@ public class ExpenseServiceImpl implements ExpenseService{
     @Override
     public Expense findById(Long id){
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Expense not found"));
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Expense not found"
+                        )
+                );
     }
     @Override
     public Expense update(Long id, Expense expense){
