@@ -20,7 +20,7 @@ public class ExpenseController {
         this.service = service;
     }
 
-    @PostMapping
+    @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<ExpenseDTO> create(@RequestBody ExpenseDTO dto) {
         Expense saved = service.save(ExpenseMapper.toEntity(dto));
         return ResponseEntity.ok(ExpenseMapper.toDTO(saved));
