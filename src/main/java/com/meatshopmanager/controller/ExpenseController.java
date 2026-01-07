@@ -3,7 +3,7 @@ package com.meatshopmanager.controller;
 import com.meatshopmanager.dto.ExpenseDTO;
 import com.meatshopmanager.mapper.ExpenseMapper;
 import com.meatshopmanager.model.Expense;
-import com.meatshopmanager.meatshop_manager.service.ExpenseService;
+import com.meatshopmanager.service.ExpenseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +20,7 @@ public class ExpenseController {
         this.service = service;
     }
 
-    @PostMapping(consumes = "application/json", produces = "application/json")
+    @PostMapping
     public ResponseEntity<ExpenseDTO> create(@RequestBody ExpenseDTO dto) {
         Expense saved = service.save(ExpenseMapper.toEntity(dto));
         return ResponseEntity.status(201).body(ExpenseMapper.toDTO(saved));
