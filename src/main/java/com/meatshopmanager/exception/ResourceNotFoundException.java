@@ -1,4 +1,4 @@
-package com.meatshopmanager.meatshop_manager.exception;
+package com.meatshopmanager.exception;
 
 public class ResourceNotFoundException extends RuntimeException{
     public ResourceNotFoundException(String message) {

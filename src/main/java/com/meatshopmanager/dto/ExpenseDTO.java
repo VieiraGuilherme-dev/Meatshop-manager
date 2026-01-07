@@ -1,6 +1,6 @@
-package com.meatshopmanager.meatshop_manager.dto;
+package com.meatshopmanager.dto;
 
-import com.meatshopmanager.meatshop_manager.model.ExpenseCategory;
+import com.meatshopmanager.model.ExpenseCategory;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-package com.meatshopmanager.meatshop_manager.model;
+package com.meatshopmanager.model;
 
 import jakarta.persistence.*;
 

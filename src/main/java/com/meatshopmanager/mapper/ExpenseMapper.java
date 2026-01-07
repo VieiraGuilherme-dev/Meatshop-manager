@@ -1,7 +1,7 @@
-package com.meatshopmanager.meatshop_manager.mapper;
+package com.meatshopmanager.mapper;
 
-import com.meatshopmanager.meatshop_manager.dto.ExpenseDTO;
-import com.meatshopmanager.meatshop_manager.model.Expense;
+import com.meatshopmanager.dto.ExpenseDTO;
+import com.meatshopmanager.model.Expense;
 
 public class ExpenseMapper {
     public static Expense toEntity(ExpenseDTO dto){

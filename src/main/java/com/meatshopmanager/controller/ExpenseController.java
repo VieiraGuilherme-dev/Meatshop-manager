@@ -1,8 +1,8 @@
-package com.meatshopmanager.meatshop_manager.controller;
+package com.meatshopmanager.controller;
 
-import com.meatshopmanager.meatshop_manager.dto.ExpenseDTO;
-import com.meatshopmanager.meatshop_manager.mapper.ExpenseMapper;
-import com.meatshopmanager.meatshop_manager.model.Expense;
+import com.meatshopmanager.dto.ExpenseDTO;
+import com.meatshopmanager.mapper.ExpenseMapper;
+import com.meatshopmanager.model.Expense;
 import com.meatshopmanager.meatshop_manager.service.ExpenseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
