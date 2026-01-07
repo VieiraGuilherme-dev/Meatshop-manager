@@ -1,5 +1,6 @@
 package com.meatshopmanager.meatshop_manager.service;
 
+import com.meatshopmanager.meatshop_manager.exception.ResourceNotFoundException;
 import com.meatshopmanager.meatshop_manager.model.Expense;
 import com.meatshopmanager.meatshop_manager.repository.ExpenseRepository;
 import org.springframework.http.HttpStatus;
@@ -31,11 +32,8 @@ public class ExpenseServiceImpl implements ExpenseService{
     public Expense findById(Long id){
         return repository.findById(id)
                 .orElseThrow(() ->
-                        new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
-                                "Expense not found"
-                        )
-                );
+                        new ResourceNotFoundException("Expense not found with id " + id));
+
     }
     @Override
     public Expense update(Long id, Expense expense){
