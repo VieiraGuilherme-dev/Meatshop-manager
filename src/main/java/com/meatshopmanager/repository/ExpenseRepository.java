@@ -12,29 +12,28 @@ import java.util.List;
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 
     @Query("""
-            SELECT SUM(e.amount)
-            FROM Expense e
-            
-            """)
+        SELECT SUM(e.amount)
+        FROM Expense e
+    """)
     BigDecimal getTotalExpenses();
 
     @Query("""
-              SELECT new com.meatshopmanager.dto.ExpenseByCategoryDTO(
-              e.category,
-              SUM(e.amount)
-            )
-            FROM Expense e  
-            GROUP BY e.category
-            """)
+        SELECT new com.meatshopmanager.dto.ExpenseByCategoryDTO(
+            e.category,
+            SUM(e.amount)
+        )
+        FROM Expense e
+        GROUP BY e.category
+    """)
     List<ExpenseByCategoryDTO> getTotalByCategory();
 
     @Query("""
-           SELECT new com.meatshopmanager.dto.ExpenseByCategoryDTO(
-           YEAR(e.expenseDate),
-           MONTH(e.expenseDate),
-           SUM(e.amount)
-           )
-           FROM Expense e
+        SELECT new com.meatshopmanager.dto.ExpenseByMonthDTO(
+            YEAR(e.expenseDate),
+            MONTH(e.expenseDate),
+            SUM(e.amount)
+        )
+        FROM Expense e
         GROUP BY YEAR(e.expenseDate), MONTH(e.expenseDate)
         ORDER BY YEAR(e.expenseDate), MONTH(e.expenseDate)
     """)
