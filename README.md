@@ -4,6 +4,11 @@ Sistema backend para gerenciamento de despesas de um açougue, desenvolvido com 
 
 ---
 
+## Arquitetura do Sistema
+
+![Arquitetura do MeatShop Manager](src/main/img/projetoMeat.png)
+---
+
 ## Tecnologias Utilizadas
 
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
