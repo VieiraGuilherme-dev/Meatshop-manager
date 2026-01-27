@@ -19,7 +19,7 @@ Sistema backend para gerenciamento de despesas de um açougue, desenvolvido com 
 
 ---
 
-## Diagrama Geral da Arquitetura
+## Diagrama Geral 
 
 ```mermaid
 flowchart LR
