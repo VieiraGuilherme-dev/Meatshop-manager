@@ -57,27 +57,3 @@ Os dados do dashboard são calculados diretamente no banco de dados utilizando *
 
 ---
 
-## Endpoints da API
-
-### 🔹 Despesas
-
-| Método | Endpoint             | Descrição         |
-| ------ | -------------------- | ----------------- |
-| POST   | `/api/expenses`      | Criar despesa     |
-| GET    | `/api/expenses`      | Listar despesas   |
-| GET    | `/api/expenses/{id}` | Buscar por ID     |
-| PUT    | `/api/expenses/{id}` | Atualizar despesa |
-| DELETE | `/api/expenses/{id}` | Remover despesa   |
-
-### 🔹 Dashboard
-
-| Método | Endpoint                           | Descrição           |
-| ------ | ---------------------------------- | ------------------- |
-| GET    | `/api/expenses/dashboard/total`    | Total gasto         |
-| GET    | `/api/expenses/dashboard/category` | Total por categoria |
-| GET    | `/api/expenses/dashboard/month`    | Total por mês       |
-
----
-
-
-
