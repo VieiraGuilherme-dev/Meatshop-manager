@@ -39,7 +39,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         Expense existing = findById(id);
 
         existing.setDescription(expense.getDescription());
-        existing.setCategory(expense.getCategory());
+        existing.setCategoria(expense.getCategoria());
         existing.setAmount(expense.getAmount());
         existing.setExpenseDate(expense.getExpenseDate());
 

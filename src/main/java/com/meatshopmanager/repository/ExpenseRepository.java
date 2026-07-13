@@ -19,11 +19,11 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 
     @Query("""
         SELECT new com.meatshopmanager.dto.ExpenseByCategoryDTO(
-            e.category,
+            e.categoria.nome,
             SUM(e.amount)
         )
         FROM Expense e
-        GROUP BY e.category
+        GROUP BY e.categoria.nome
     """)
     List<ExpenseByCategoryDTO> getTotalByCategory();
 
@@ -38,4 +38,6 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
         ORDER BY YEAR(e.expenseDate), MONTH(e.expenseDate)
     """)
     List<ExpenseByMonthDTO> getTotalByMonth();
+
+    boolean existsByCategoria_Id(Long categoriaId);
 }

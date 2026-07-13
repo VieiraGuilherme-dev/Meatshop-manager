@@ -1,7 +1,5 @@
 package com.meatshopmanager.dto;
 
-import com.meatshopmanager.model.ExpenseCategory;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -9,7 +7,8 @@ public class ExpenseDTO {
 
     private Long id;
     private String description;
-    private ExpenseCategory category;
+    private Long categoriaId;
+    private String categoriaNome;
     private BigDecimal amount;
     private LocalDate expenseDate;
 
@@ -32,12 +31,20 @@ public class ExpenseDTO {
         this.description = description;
     }
 
-    public ExpenseCategory getCategory() {
-        return category;
+    public Long getCategoriaId() {
+        return categoriaId;
     }
 
-    public void setCategory(ExpenseCategory category) {
-        this.category = category;
+    public void setCategoriaId(Long categoriaId) {
+        this.categoriaId = categoriaId;
+    }
+
+    public String getCategoriaNome() {
+        return categoriaNome;
+    }
+
+    public void setCategoriaNome(String categoriaNome) {
+        this.categoriaNome = categoriaNome;
     }
 
     public BigDecimal getAmount() {

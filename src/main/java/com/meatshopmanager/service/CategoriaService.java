@@ -4,6 +4,7 @@ import com.meatshopmanager.dto.CategoriaRequestDTO;
 import com.meatshopmanager.dto.CategoriaResponseDTO;
 import com.meatshopmanager.mapper.CategoriaMapper;
 import com.meatshopmanager.model.Categoria;
+import com.meatshopmanager.exception.CategoriaDuplicadaException;
 import com.meatshopmanager.exception.ResourceNotFoundException;
 import com.meatshopmanager.model.TipoCategoria;
 import com.meatshopmanager.repository.CategoriaRepository;
@@ -24,7 +25,9 @@ public class CategoriaService {
     }
 
     public CategoriaResponseDTO criar(CategoriaRequestDTO dto) {
-        // TODO (Claude Code vai adicionar): validar nome duplicado antes de salvar
+        if (categoriaRepository.existsByNome(dto.getNome())) {
+            throw new CategoriaDuplicadaException("Já existe uma categoria com o nome: " + dto.getNome());
+        }
         Categoria categoria = categoriaMapper.toEntity(dto);
         Categoria salva = categoriaRepository.save(categoria);
         return categoriaMapper.toResponseDTO(salva);

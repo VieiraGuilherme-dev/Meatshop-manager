@@ -17,9 +17,9 @@ public class Expense {
     @Column(nullable = false)
     private String description;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private ExpenseCategory category;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "categoria_id", nullable = false)
+    private Categoria categoria;
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal amount;
@@ -51,12 +51,12 @@ public class Expense {
         this.description = description;
     }
 
-    public ExpenseCategory getCategory() {
-        return category;
+    public Categoria getCategoria() {
+        return categoria;
     }
 
-    public void setCategory(ExpenseCategory category) {
-        this.category = category;
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 
     public BigDecimal getAmount() {

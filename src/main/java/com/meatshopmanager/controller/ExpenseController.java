@@ -15,15 +15,17 @@ import java.util.List;
 public class ExpenseController {
 
     private final ExpenseService service;
+    private final ExpenseMapper mapper;
 
-    public ExpenseController(ExpenseService service) {
+    public ExpenseController(ExpenseService service, ExpenseMapper mapper) {
         this.service = service;
+        this.mapper = mapper;
     }
 
     @PostMapping
     public ResponseEntity<ExpenseDTO> create(@RequestBody ExpenseDTO dto) {
-        Expense saved = service.save(ExpenseMapper.toEntity(dto));
-        return ResponseEntity.status(201).body(ExpenseMapper.toDTO(saved));
+        Expense saved = service.save(mapper.toEntity(dto));
+        return ResponseEntity.status(201).body(mapper.toDTO(saved));
     }
 
     @GetMapping
@@ -31,7 +33,7 @@ public class ExpenseController {
         return ResponseEntity.ok(
                 service.findAll()
                         .stream()
-                        .map(ExpenseMapper::toDTO)
+                        .map(mapper::toDTO)
                         .toList()
         );
     }
@@ -39,7 +41,7 @@ public class ExpenseController {
     @GetMapping("/{id}")
     public ResponseEntity<ExpenseDTO> findById(@PathVariable Long id) {
         Expense expense = service.findById(id);
-        return ResponseEntity.ok(ExpenseMapper.toDTO(expense));
+        return ResponseEntity.ok(mapper.toDTO(expense));
     }
 
     @PutMapping("/{id}")
@@ -47,8 +49,8 @@ public class ExpenseController {
             @PathVariable Long id,
             @RequestBody ExpenseDTO dto
     ) {
-        Expense updated = service.update(id, ExpenseMapper.toEntity(dto));
-        return ResponseEntity.ok(ExpenseMapper.toDTO(updated));
+        Expense updated = service.update(id, mapper.toEntity(dto));
+        return ResponseEntity.ok(mapper.toDTO(updated));
     }
 
     @DeleteMapping("/{id}")
