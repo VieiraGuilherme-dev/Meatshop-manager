@@ -4,6 +4,7 @@ import com.meatshopmanager.dto.CategoriaRequestDTO;
 import com.meatshopmanager.dto.CategoriaResponseDTO;
 import com.meatshopmanager.mapper.CategoriaMapper;
 import com.meatshopmanager.model.Categoria;
+import com.meatshopmanager.exception.ResourceNotFoundException;
 import com.meatshopmanager.model.TipoCategoria;
 import com.meatshopmanager.repository.CategoriaRepository;
 import org.springframework.stereotype.Service;
@@ -45,13 +46,13 @@ public class CategoriaService {
 
     public CategoriaResponseDTO buscarPorId(Long id) {
         Categoria categoria = categoriaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Categoria não encontrada")); // TODO: trocar por ResourceNotFoundException
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
         return categoriaMapper.toResponseDTO(categoria);
     }
 
     public CategoriaResponseDTO atualizar(Long id, CategoriaRequestDTO dto) {
         Categoria categoria = categoriaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Categoria não encontrada")); // TODO: trocar por ResourceNotFoundException
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
 
         categoria.setNome(dto.getNome());
         categoria.setTipo(dto.getTipo());

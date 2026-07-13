@@ -41,11 +41,11 @@ public class CategoriaController {
          return ResponseEntity.ok(categoriaService.buscarPorId(id));
       }
 
-      @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<CategoriaResponseDTO> atualizar(
             @PathVariable Long id, @Valid @RequestBody CategoriaRequestDTO dto) {
-         return ResponseEntity.ok(categoriaService.atualizar(id, dto));
-      }
+        return ResponseEntity.ok(categoriaService.atualizar(id, dto));
+    }
 
       @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
