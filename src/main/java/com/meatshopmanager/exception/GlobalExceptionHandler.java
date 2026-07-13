@@ -23,4 +23,28 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
+
+    @ExceptionHandler(CategoriaDuplicadaException.class)
+    public ResponseEntity<Map<String, Object>> handleCategoriaDuplicada(CategoriaDuplicadaException ex) {
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.CONFLICT.value());
+        body.put("error", "Conflict");
+        body.put("message", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+    }
+
+    @ExceptionHandler(CategoriaEmUsoException.class)
+    public ResponseEntity<Map<String, Object>> handleCategoriaEmUso(CategoriaEmUsoException ex) {
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.CONFLICT.value());
+        body.put("error", "Conflict");
+        body.put("message", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+    }
 }
