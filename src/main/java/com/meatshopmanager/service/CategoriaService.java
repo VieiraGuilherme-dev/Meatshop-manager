@@ -5,9 +5,11 @@ import com.meatshopmanager.dto.CategoriaResponseDTO;
 import com.meatshopmanager.mapper.CategoriaMapper;
 import com.meatshopmanager.model.Categoria;
 import com.meatshopmanager.exception.CategoriaDuplicadaException;
+import com.meatshopmanager.exception.CategoriaEmUsoException;
 import com.meatshopmanager.exception.ResourceNotFoundException;
 import com.meatshopmanager.model.TipoCategoria;
 import com.meatshopmanager.repository.CategoriaRepository;
+import com.meatshopmanager.repository.ExpenseRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,10 +20,13 @@ public class CategoriaService {
 
     private final CategoriaRepository categoriaRepository;
     private final CategoriaMapper categoriaMapper;
+    private final ExpenseRepository expenseRepository;
 
-    public CategoriaService(CategoriaRepository categoriaRepository, CategoriaMapper categoriaMapper) {
+    public CategoriaService(CategoriaRepository categoriaRepository, CategoriaMapper categoriaMapper,
+                            ExpenseRepository expenseRepository) {
         this.categoriaRepository = categoriaRepository;
         this.categoriaMapper = categoriaMapper;
+        this.expenseRepository = expenseRepository;
     }
 
     public CategoriaResponseDTO criar(CategoriaRequestDTO dto) {
@@ -66,7 +71,12 @@ public class CategoriaService {
     }
 
     public void deletar(Long id) {
-        // TODO (Claude Code vai adicionar): validar se categoria está em uso antes de deletar
+        if (!categoriaRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Categoria não encontrada");
+        }
+        if (expenseRepository.existsByCategoria_Id(id)) {
+            throw new CategoriaEmUsoException("Categoria está em uso por uma ou mais despesas e não pode ser removida");
+        }
         categoriaRepository.deleteById(id);
     }
 }
