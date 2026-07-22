@@ -49,7 +49,7 @@ public class FuncionarioService {
 
     public FuncionarioResponseDTO atualizar(Long id, FuncionarioRequestDTO dto) {
         Funcionario funcionario = funcionarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado")); 
+                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
 
         funcionario.setNome(dto.getNome());
         funcionario.setCargo(dto.getCargo());
