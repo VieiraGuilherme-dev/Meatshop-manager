@@ -5,6 +5,7 @@ import com.meatshopmanager.dto.FuncionarioResponseDTO;
 import com.meatshopmanager.mapper.FuncionarioMapper;
 import com.meatshopmanager.model.Funcionario;
 import com.meatshopmanager.repository.FuncionarioRepository;
+import com.meatshopmanager.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,13 +44,13 @@ public class FuncionarioService {
 
     public FuncionarioResponseDTO buscarPorId(Long id) {
         Funcionario funcionario = funcionarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Funcionário não encontrado"));
         return funcionarioMapper.toResponseDTO(funcionario);
     }
 
     public FuncionarioResponseDTO atualizar(Long id, FuncionarioRequestDTO dto) {
         Funcionario funcionario = funcionarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Funcionário não encontrado"));
 
         funcionario.setNome(dto.getNome());
         funcionario.setCargo(dto.getCargo());
