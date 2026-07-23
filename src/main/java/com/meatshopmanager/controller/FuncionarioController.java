@@ -1,5 +1,6 @@
 package com.meatshopmanager.controller;
 
+import com.meatshopmanager.dto.DemissaoRequestDTO;
 import com.meatshopmanager.dto.FuncionarioRequestDTO;
 import com.meatshopmanager.dto.FuncionarioResponseDTO;
 import com.meatshopmanager.service.FuncionarioService;
@@ -44,6 +45,12 @@ public class FuncionarioController {
     public ResponseEntity<FuncionarioResponseDTO> atualizar(
             @PathVariable Long id, @Valid @RequestBody FuncionarioRequestDTO dto) {
         return ResponseEntity.ok(funcionarioService.atualizar(id, dto));
+    }
+
+    @PatchMapping("/{id}/demitir")
+    public ResponseEntity<FuncionarioResponseDTO> demitir(
+            @PathVariable Long id, @Valid @RequestBody DemissaoRequestDTO dto) {
+        return ResponseEntity.ok(funcionarioService.demitir(id, dto));
     }
 
     @DeleteMapping("/{id}")

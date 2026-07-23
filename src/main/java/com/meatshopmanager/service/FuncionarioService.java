@@ -1,11 +1,13 @@
 package com.meatshopmanager.service;
 
+import com.meatshopmanager.dto.DemissaoRequestDTO;
 import com.meatshopmanager.dto.FuncionarioRequestDTO;
 import com.meatshopmanager.dto.FuncionarioResponseDTO;
+import com.meatshopmanager.exception.RegraDeNegocioException;
+import com.meatshopmanager.exception.ResourceNotFoundException;
 import com.meatshopmanager.mapper.FuncionarioMapper;
 import com.meatshopmanager.model.Funcionario;
 import com.meatshopmanager.repository.FuncionarioRepository;
-import com.meatshopmanager.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,6 +61,23 @@ public class FuncionarioService {
 
         Funcionario atualizado = funcionarioRepository.save(funcionario);
         return funcionarioMapper.toResponseDTO(atualizado);
+    }
+
+    public FuncionarioResponseDTO demitir(Long id, DemissaoRequestDTO dto) {
+        Funcionario funcionario = funcionarioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Funcionário não encontrado"));
+
+        if (!funcionario.isAtivo()) {
+            throw new RegraDeNegocioException("Funcionário já está inativo");
+        }
+        if (dto.getDataDemissao().isBefore(funcionario.getDataAdmissao())) {
+            throw new RegraDeNegocioException("Data de demissão não pode ser anterior à data de admissão");
+        }
+
+        funcionario.setAtivo(false);
+        funcionario.setDataDemissao(dto.getDataDemissao());
+
+        return funcionarioMapper.toResponseDTO(funcionarioRepository.save(funcionario));
     }
 
     public void deletar(Long id) {
