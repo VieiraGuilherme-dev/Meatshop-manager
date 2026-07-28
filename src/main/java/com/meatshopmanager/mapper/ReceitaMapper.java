@@ -4,6 +4,7 @@ import com.meatshopmanager.dto.ReceitaRequestDTO;
 import com.meatshopmanager.dto.ReceitaResponseDTO;
 import com.meatshopmanager.model.Categoria;
 import com.meatshopmanager.model.Receita;
+import com.meatshopmanager.exception.ResourceNotFoundException;
 import com.meatshopmanager.repository.CategoriaRepository;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +19,7 @@ public class ReceitaMapper {
 
     public Receita toEntity(ReceitaRequestDTO dto) {
         Categoria categoria = categoriaRepository.findById(dto.getCategoriaId())
-                .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
 
         return new Receita(dto.getDescricao(), dto.getValor(), dto.getData(), categoria);
     }
