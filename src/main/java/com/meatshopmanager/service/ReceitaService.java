@@ -2,6 +2,7 @@ package com.meatshopmanager.service;
 
 import com.meatshopmanager.dto.ReceitaRequestDTO;
 import com.meatshopmanager.dto.ReceitaResponseDTO;
+import com.meatshopmanager.exception.ResourceNotFoundException;
 import com.meatshopmanager.mapper.ReceitaMapper;
 import com.meatshopmanager.model.Receita;
 import com.meatshopmanager.repository.ReceitaRepository;
@@ -36,17 +37,17 @@ public class ReceitaService {
 
     public ReceitaResponseDTO buscarPorId(Long id){
         Receita receita = receitaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Receita não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Receita não encontrada com id: " + id));
         return receitaMapper.toResponseDTO(receita);
     }
 
     public ReceitaResponseDTO atualizar(Long id, ReceitaRequestDTO dto){
         Receita receita = receitaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Receita não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Receita não encontrada com id: " + id));
         Receita atualizada = receitaMapper.toEntity(dto);
         atualizada.setId(receita.getId());
 
-        Receita salva = receitaRepository.save(receita);
+        Receita salva = receitaRepository.save(atualizada);
         return receitaMapper.toResponseDTO(salva);
     }
 

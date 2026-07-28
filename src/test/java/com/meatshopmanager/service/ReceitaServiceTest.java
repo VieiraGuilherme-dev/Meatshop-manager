@@ -2,6 +2,7 @@ package com.meatshopmanager.service;
 
 import com.meatshopmanager.dto.ReceitaRequestDTO;
 import com.meatshopmanager.dto.ReceitaResponseDTO;
+import com.meatshopmanager.exception.ResourceNotFoundException;
 import com.meatshopmanager.mapper.ReceitaMapper;
 import com.meatshopmanager.model.Categoria;
 import com.meatshopmanager.model.Receita;
@@ -15,8 +16,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,7 +36,7 @@ class ReceitaServiceTest {
 
     @Test
     void deveCriarReceitaComSucesso() {
-   
+
         ReceitaRequestDTO requestDTO = new ReceitaRequestDTO();
         requestDTO.setDescricao("Venda de carne");
         requestDTO.setValor(new BigDecimal("500.00"));
@@ -58,5 +61,49 @@ class ReceitaServiceTest {
 
         assertEquals("Venda de carne", resultado.getDescricao());
         assertEquals(1L, resultado.getId());
+    }
+
+    @Test
+    void deveLancarExcecaoAoBuscarPorIdInexistente() {
+        Long id = 99L;
+
+        when(receitaRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> receitaService.buscarPorId(id));
+    }
+
+    @Test
+    void deveAtualizarReceitaComSucesso() {
+        Long id = 1L;
+
+        ReceitaRequestDTO requestDTO = new ReceitaRequestDTO();
+        requestDTO.setDescricao("Venda atualizada");
+        requestDTO.setValor(new BigDecimal("750.00"));
+        requestDTO.setData(LocalDate.of(2026, 7, 22));
+        requestDTO.setCategoriaId(80L);
+
+        Categoria categoria = new Categoria("Vendas", TipoCategoria.RECEITA, null);
+        categoria.setId(80L);
+
+        Receita receitaExistente = new Receita("Venda de carne", new BigDecimal("500.00"), LocalDate.of(2026, 7, 22), categoria);
+        receitaExistente.setId(id);
+
+        Receita receitaAtualizada = new Receita("Venda atualizada", new BigDecimal("750.00"), LocalDate.of(2026, 7, 22), categoria);
+
+        Receita receitaSalva = new Receita("Venda atualizada", new BigDecimal("750.00"), LocalDate.of(2026, 7, 22), categoria);
+        receitaSalva.setId(id);
+
+        ReceitaResponseDTO responseDTO = new ReceitaResponseDTO(
+                id, "Venda atualizada", new BigDecimal("750.00"), LocalDate.of(2026, 7, 22), 80L, "Vendas");
+
+        when(receitaRepository.findById(id)).thenReturn(Optional.of(receitaExistente));
+        when(receitaMapper.toEntity(requestDTO)).thenReturn(receitaAtualizada);
+        when(receitaRepository.save(receitaAtualizada)).thenReturn(receitaSalva);
+        when(receitaMapper.toResponseDTO(receitaSalva)).thenReturn(responseDTO);
+
+        ReceitaResponseDTO resultado = receitaService.atualizar(id, requestDTO);
+
+        assertEquals("Venda atualizada", resultado.getDescricao());
+        assertEquals(id, resultado.getId());
     }
 }
