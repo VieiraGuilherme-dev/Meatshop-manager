@@ -9,6 +9,8 @@ public class ExpenseDTO {
     private String description;
     private Long categoriaId;
     private String categoriaNome;
+    private Long funcionarioId;
+    private String funcionarioNome;
     private BigDecimal amount;
     private LocalDate expenseDate;
 
@@ -45,6 +47,22 @@ public class ExpenseDTO {
 
     public void setCategoriaNome(String categoriaNome) {
         this.categoriaNome = categoriaNome;
+    }
+
+    public Long getFuncionarioId() {
+        return funcionarioId;
+    }
+
+    public void setFuncionarioId(Long funcionarioId) {
+        this.funcionarioId = funcionarioId;
+    }
+
+    public String getFuncionarioNome() {
+        return funcionarioNome;
+    }
+
+    public void setFuncionarioNome(String funcionarioNome) {
+        this.funcionarioNome = funcionarioNome;
     }
 
     public BigDecimal getAmount() {

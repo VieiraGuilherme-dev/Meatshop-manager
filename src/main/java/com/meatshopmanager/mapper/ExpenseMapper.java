@@ -43,6 +43,11 @@ public class ExpenseMapper {
             dto.setCategoriaNome(expense.getCategoria().getNome());
         }
 
+        if (expense.getFuncionario() != null) {
+            dto.setFuncionarioId(expense.getFuncionario().getId());
+            dto.setFuncionarioNome(expense.getFuncionario().getNome());
+        }
+
         return dto;
     }
 }
