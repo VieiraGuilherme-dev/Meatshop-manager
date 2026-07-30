@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.meatshopmanager.dto.LucroRealDTO;
 
 import java.util.List;
 
@@ -37,5 +38,10 @@ public class DashboardController {
     @GetMapping("/by-month")
     public List<ExpenseByMonthDTO> byMonth(){
         return service.getTotalByMonth();
+    }
+
+    @GetMapping("/lucro")
+    public LucroRealDTO lucroReal(){
+        return service.getLucroReal();
     }
 }
