@@ -2,6 +2,7 @@ package com.meatshopmanager.service;
 
 import com.meatshopmanager.dto.ExpenseByCategoryDTO;
 import com.meatshopmanager.dto.ExpenseByMonthDTO;
+import com.meatshopmanager.dto.LucroRealDTO;
 import com.meatshopmanager.dto.TotalExpenseDTO;
 import com.meatshopmanager.model.Expense;
 
@@ -12,4 +13,5 @@ public interface DashboardService {
     TotalExpenseDTO getTotalExpenses();
     List<ExpenseByCategoryDTO> getTotalByCategory();
     List<ExpenseByMonthDTO> getTotalByMonth();
+    LucroRealDTO getLucroReal();
 }
