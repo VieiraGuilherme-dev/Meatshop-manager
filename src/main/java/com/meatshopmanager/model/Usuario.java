@@ -2,6 +2,8 @@ package com.meatshopmanager.model;
 
 import jakarta.persistence.*;
 
+@Entity
+@Table(name = "usuario")
 public class Usuario {
 
     @Id
@@ -18,7 +20,10 @@ public class Usuario {
     @Column(nullable = false)
     private Role role;
 
-    public Usuario(String email, Long id, String senha, Role role) {
+    public Usuario(){
+
+    }
+    public Usuario(String email, String senha, Role role) {
         this.email = email;
         this.senha = senha;
         this.role = role;
