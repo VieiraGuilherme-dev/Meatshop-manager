@@ -6,7 +6,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-public class MeatshopManagerApplication {
+public class
+
+MeatshopManagerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MeatshopManagerApplication.class, args);
