@@ -7,10 +7,12 @@ import com.meatshopmanager.service.ReceitaService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@PreAuthorize("hasRole('ADMIN')")
 @RestController
 @RequestMapping("/api/receitas")
 public class ReceitaController {

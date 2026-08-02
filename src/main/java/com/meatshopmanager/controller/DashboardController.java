@@ -5,6 +5,7 @@ import com.meatshopmanager.dto.ExpenseByMonthDTO;
 import com.meatshopmanager.dto.TotalExpenseDTO;
 import com.meatshopmanager.model.Expense;
 import com.meatshopmanager.service.DashboardService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +14,7 @@ import com.meatshopmanager.dto.LucroRealDTO;
 
 import java.util.List;
 
-
+@PreAuthorize("hasRole('ADMIN')")
 @RestController
 @RequestMapping("/api/dashboard")
 @CrossOrigin(origins = "*")

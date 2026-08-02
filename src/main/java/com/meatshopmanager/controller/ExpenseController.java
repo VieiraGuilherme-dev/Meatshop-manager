@@ -5,6 +5,7 @@ import com.meatshopmanager.mapper.ExpenseMapper;
 import com.meatshopmanager.model.Expense;
 import com.meatshopmanager.service.ExpenseService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,6 +45,7 @@ public class ExpenseController {
         return ResponseEntity.ok(mapper.toDTO(expense));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<ExpenseDTO> update(
             @PathVariable Long id,
@@ -53,6 +55,7 @@ public class ExpenseController {
         return ResponseEntity.ok(mapper.toDTO(updated));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);

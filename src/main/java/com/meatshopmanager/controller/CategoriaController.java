@@ -7,6 +7,7 @@ import com.meatshopmanager.service.CategoriaService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class CategoriaController {
          this.categoriaService = categoriaService;
      }
 
+     @PreAuthorize("hasRole('ADMIN')")
      @PostMapping
      public ResponseEntity<CategoriaResponseDTO> criar(@Valid @RequestBody CategoriaRequestDTO dto) {
          CategoriaResponseDTO criada = categoriaService.criar(dto);
@@ -41,13 +43,15 @@ public class CategoriaController {
          return ResponseEntity.ok(categoriaService.buscarPorId(id));
       }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<CategoriaResponseDTO> atualizar(
             @PathVariable Long id, @Valid @RequestBody CategoriaRequestDTO dto) {
         return ResponseEntity.ok(categoriaService.atualizar(id, dto));
     }
 
-      @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
          categoriaService.deletar(id);
          return ResponseEntity.noContent().build();
