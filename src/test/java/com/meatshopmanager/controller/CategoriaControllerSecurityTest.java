@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
-
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -22,5 +22,17 @@ class CategoriaControllerSecurityTest {
         mockMvc.perform(get("/api/categorias")
                         .with(user("funcionario").roles("FUNCIONARIO")))
                 .andExpect(status().isOk());
+    }
+    @Test
+    void funcionarioNaoDeveConseguirDeletarCategoria() throws Exception {
+        mockMvc.perform(delete("/api/categorias/2")
+                        .with(user("funcionario").roles("FUNCIONARIO")))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void semAutenticacaoNaoDeveConseguirListarCategorias() throws Exception {
+        mockMvc.perform(get("/api/categorias"))
+                .andExpect(status().isForbidden());
     }
 }
