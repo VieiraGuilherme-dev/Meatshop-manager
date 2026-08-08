@@ -7,6 +7,7 @@ import com.meatshopmanager.dto.RegistrarResponseDTO;
 import com.meatshopmanager.model.Usuario;
 import com.meatshopmanager.security.JwtService;
 import com.meatshopmanager.service.UsuarioService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@SecurityRequirements
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
