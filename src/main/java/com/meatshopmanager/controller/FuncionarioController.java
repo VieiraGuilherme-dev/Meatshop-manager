@@ -5,12 +5,12 @@ import com.meatshopmanager.dto.FuncionarioRequestDTO;
 import com.meatshopmanager.dto.FuncionarioResponseDTO;
 import com.meatshopmanager.service.FuncionarioService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
-
-import java.util.List;
 
 @PreAuthorize("hasRole('ADMIN')")
 @RestController
@@ -30,12 +30,10 @@ public class FuncionarioController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FuncionarioResponseDTO>> listar(
-            @RequestParam(required = false) Boolean ativo) {
-        if (Boolean.TRUE.equals(ativo)) {
-            return ResponseEntity.ok(funcionarioService.listarAtivos());
-        }
-        return ResponseEntity.ok(funcionarioService.listarTodos());
+    public ResponseEntity<Page<FuncionarioResponseDTO>> listar(
+            @RequestParam(required = false) Boolean ativo,
+            Pageable pageable) {
+        return ResponseEntity.ok(funcionarioService.listarComFiltros(ativo, pageable));
     }
 
     @GetMapping("/{id}")

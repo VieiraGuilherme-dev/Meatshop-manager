@@ -6,8 +6,11 @@ import com.meatshopmanager.exception.ResourceNotFoundException;
 import com.meatshopmanager.mapper.ReceitaMapper;
 import com.meatshopmanager.model.Receita;
 import com.meatshopmanager.repository.ReceitaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +38,11 @@ public class ReceitaService {
                 .collect(Collectors.toList());
     }
 
+    public Page<ReceitaResponseDTO> listarComFiltros(Long categoriaId, LocalDate dataInicio, LocalDate dataFim, Pageable pageable) {
+        return receitaRepository.findComFiltros(categoriaId, dataInicio, dataFim, pageable)
+                .map(receitaMapper::toResponseDTO);
+    }
+
     public ReceitaResponseDTO buscarPorId(Long id){
         Receita receita = receitaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Receita não encontrada com id: " + id));
@@ -55,5 +63,3 @@ public class ReceitaService {
         receitaRepository.deleteById(id);
     }
 }
-
-

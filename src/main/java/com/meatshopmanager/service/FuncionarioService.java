@@ -8,6 +8,8 @@ import com.meatshopmanager.exception.ResourceNotFoundException;
 import com.meatshopmanager.mapper.FuncionarioMapper;
 import com.meatshopmanager.model.Funcionario;
 import com.meatshopmanager.repository.FuncionarioRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,6 +44,11 @@ public class FuncionarioService {
                 .stream()
                 .map(funcionarioMapper::toResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    public Page<FuncionarioResponseDTO> listarComFiltros(Boolean ativo, Pageable pageable) {
+        return funcionarioRepository.findComFiltros(ativo, pageable)
+                .map(funcionarioMapper::toResponseDTO);
     }
 
     public FuncionarioResponseDTO buscarPorId(Long id) {

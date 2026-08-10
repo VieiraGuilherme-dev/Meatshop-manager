@@ -3,8 +3,11 @@ package com.meatshopmanager.service;
 import com.meatshopmanager.exception.ResourceNotFoundException;
 import com.meatshopmanager.model.Expense;
 import com.meatshopmanager.repository.ExpenseRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -24,6 +27,11 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public List<Expense> findAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public Page<Expense> findComFiltros(Long categoriaId, LocalDate dataInicio, LocalDate dataFim, Pageable pageable) {
+        return repository.findComFiltros(categoriaId, dataInicio, dataFim, pageable);
     }
 
     @Override

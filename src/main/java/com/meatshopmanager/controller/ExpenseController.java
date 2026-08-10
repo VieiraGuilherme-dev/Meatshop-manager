@@ -4,11 +4,13 @@ import com.meatshopmanager.dto.ExpenseDTO;
 import com.meatshopmanager.mapper.ExpenseMapper;
 import com.meatshopmanager.model.Expense;
 import com.meatshopmanager.service.ExpenseService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/expenses")
@@ -30,12 +32,15 @@ public class ExpenseController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ExpenseDTO>> findAll() {
+    public ResponseEntity<Page<ExpenseDTO>> findAll(
+            @RequestParam(required = false) Long categoriaId,
+            @RequestParam(required = false) LocalDate dataInicio,
+            @RequestParam(required = false) LocalDate dataFim,
+            Pageable pageable
+    ) {
         return ResponseEntity.ok(
-                service.findAll()
-                        .stream()
+                service.findComFiltros(categoriaId, dataInicio, dataFim, pageable)
                         .map(mapper::toDTO)
-                        .toList()
         );
     }
 

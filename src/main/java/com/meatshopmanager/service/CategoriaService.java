@@ -11,6 +11,8 @@ import com.meatshopmanager.model.TipoCategoria;
 import com.meatshopmanager.repository.CategoriaRepository;
 import com.meatshopmanager.repository.ExpenseRepository;
 import com.meatshopmanager.repository.ReceitaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,6 +55,11 @@ public class CategoriaService {
                 .stream()
                 .map(categoriaMapper::toResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    public Page<CategoriaResponseDTO> listarComFiltros(TipoCategoria tipo, Pageable pageable) {
+        return categoriaRepository.findComFiltros(tipo, pageable)
+                .map(categoriaMapper::toResponseDTO);
     }
 
     public CategoriaResponseDTO buscarPorId(Long id) {

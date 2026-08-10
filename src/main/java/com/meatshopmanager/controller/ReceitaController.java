@@ -2,15 +2,16 @@ package com.meatshopmanager.controller;
 
 import com.meatshopmanager.dto.ReceitaRequestDTO;
 import com.meatshopmanager.dto.ReceitaResponseDTO;
-import com.meatshopmanager.model.Receita;
 import com.meatshopmanager.service.ReceitaService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.time.LocalDate;
 
 @PreAuthorize("hasRole('ADMIN')")
 @RestController
@@ -30,8 +31,12 @@ public class ReceitaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReceitaResponseDTO>> listar(){
-        return ResponseEntity.ok(receitaService.listarTodas());
+    public ResponseEntity<Page<ReceitaResponseDTO>> listar(
+            @RequestParam(required = false) Long categoriaId,
+            @RequestParam(required = false) LocalDate dataInicio,
+            @RequestParam(required = false) LocalDate dataFim,
+            Pageable pageable) {
+        return ResponseEntity.ok(receitaService.listarComFiltros(categoriaId, dataInicio, dataFim, pageable));
     }
 
     @GetMapping("/{id}")
@@ -50,5 +55,4 @@ public class ReceitaController {
         receitaService.deletar(id);
         return ResponseEntity.noContent().build();
     }
-
 }
