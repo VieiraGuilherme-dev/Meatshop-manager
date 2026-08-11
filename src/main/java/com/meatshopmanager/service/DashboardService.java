@@ -4,8 +4,8 @@ import com.meatshopmanager.dto.ExpenseByCategoryDTO;
 import com.meatshopmanager.dto.ExpenseByMonthDTO;
 import com.meatshopmanager.dto.LucroRealDTO;
 import com.meatshopmanager.dto.TotalExpenseDTO;
-import com.meatshopmanager.model.Expense;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface DashboardService {
@@ -14,4 +14,6 @@ public interface DashboardService {
     List<ExpenseByCategoryDTO> getTotalByCategory();
     List<ExpenseByMonthDTO> getTotalByMonth();
     LucroRealDTO getLucroReal();
+    byte[] gerarRelatorioExcel(LocalDate dataInicio, LocalDate dataFim);
+    byte[] gerarRelatorioPdf(LocalDate dataInicio, LocalDate dataFim);
 }
