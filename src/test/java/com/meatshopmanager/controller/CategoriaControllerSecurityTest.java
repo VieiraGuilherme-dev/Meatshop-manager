@@ -23,6 +23,7 @@ class CategoriaControllerSecurityTest {
                         .with(user("funcionario").roles("FUNCIONARIO")))
                 .andExpect(status().isOk());
     }
+
     @Test
     void funcionarioNaoDeveConseguirDeletarCategoria() throws Exception {
         mockMvc.perform(delete("/api/categorias/2")
@@ -33,6 +34,6 @@ class CategoriaControllerSecurityTest {
     @Test
     void semAutenticacaoNaoDeveConseguirListarCategorias() throws Exception {
         mockMvc.perform(get("/api/categorias"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 }
