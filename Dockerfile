@@ -6,7 +6,7 @@ COPY .mvn .mvn
 COPY pom.xml .
 COPY src ./src
 RUN chmod +x mvnw
-RUN --mount=type=cache,target=/root/.m2 ./mvnw clean package -DskipTests
+RUN ./mvnw clean package -DskipTests
 
 FROM eclipse-temurin:21-jre
 WORKDIR /app
