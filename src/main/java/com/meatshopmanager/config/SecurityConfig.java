@@ -75,6 +75,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",
                 "https://meatshop-manager-front.vercel.app",
+                "https://meatshop-manager.vercel.app",
                 "https://meatshop-manager-production.up.railway.app"
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
