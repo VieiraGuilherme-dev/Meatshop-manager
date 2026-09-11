@@ -1,5 +1,6 @@
 package com.meatshopmanager.repository;
 
+import com.meatshopmanager.dto.CategoriaDespesaResumoDTO;
 import com.meatshopmanager.dto.ExpenseByCategoryDTO;
 import com.meatshopmanager.dto.ExpenseByMonthDTO;
 import com.meatshopmanager.model.Expense;
@@ -56,4 +57,39 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     );
 
     boolean existsByCategoria_Id(Long categoriaId);
+
+    @Query("""
+        SELECT SUM(e.amount)
+        FROM Expense e
+        WHERE YEAR(e.expenseDate) = :ano AND MONTH(e.expenseDate) = :mes
+    """)
+    BigDecimal getSomaDespesasPorPeriodo(@Param("mes") int mes, @Param("ano") int ano);
+
+    @Query("""
+        SELECT new com.meatshopmanager.dto.CategoriaDespesaResumoDTO(
+            e.categoria.nome,
+            SUM(e.amount)
+        )
+        FROM Expense e
+        WHERE YEAR(e.expenseDate) = :ano AND MONTH(e.expenseDate) = :mes
+        GROUP BY e.categoria.nome
+        ORDER BY SUM(e.amount) DESC
+    """)
+    List<CategoriaDespesaResumoDTO> getTopCategoriasDespesaPorPeriodo(
+            @Param("mes") int mes,
+            @Param("ano") int ano,
+            Pageable pageable
+    );
+
+    @Query("""
+        SELECT SUM(e.amount)
+        FROM Expense e
+        WHERE e.categoria.nome = :nome
+        AND YEAR(e.expenseDate) = :ano AND MONTH(e.expenseDate) = :mes
+    """)
+    BigDecimal getSomaDespesasCategoriaPorPeriodo(
+            @Param("nome") String nome,
+            @Param("mes") int mes,
+            @Param("ano") int ano
+    );
 }

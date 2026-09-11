@@ -7,10 +7,20 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface FuncionarioRepository extends JpaRepository<Funcionario, Long> {
     List<Funcionario> findByAtivo(boolean ativo);
+
+    long countByAtivo(boolean ativo);
+
+    @Query("""
+        SELECT SUM(f.salario)
+        FROM Funcionario f
+        WHERE f.ativo = true
+    """)
+    BigDecimal getSomaSalariosAtivos();
 
     @Query("""
         SELECT f FROM Funcionario f

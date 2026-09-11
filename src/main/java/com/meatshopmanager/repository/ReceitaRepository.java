@@ -20,6 +20,13 @@ public interface ReceitaRepository extends JpaRepository<Receita, Long> {
     BigDecimal getTotalReceitas();
 
     @Query("""
+        SELECT SUM(r.valor)
+        FROM Receita r
+        WHERE YEAR(r.data) = :ano AND MONTH(r.data) = :mes
+    """)
+    BigDecimal getSomaReceitasPorPeriodo(@Param("mes") int mes, @Param("ano") int ano);
+
+    @Query("""
         SELECT r FROM Receita r
         WHERE (:categoriaId IS NULL OR r.categoria.id = :categoriaId)
         AND (:dataInicio IS NULL OR r.data >= :dataInicio)

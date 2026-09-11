@@ -11,19 +11,23 @@ import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
+import com.meatshopmanager.dto.CategoriaDespesaResumoDTO;
 import com.meatshopmanager.dto.ExpenseByCategoryDTO;
 import com.meatshopmanager.dto.ExpenseByMonthDTO;
 import com.meatshopmanager.dto.LucroRealDTO;
+import com.meatshopmanager.dto.ResumoDashboardDTO;
 import com.meatshopmanager.dto.TotalExpenseDTO;
 import com.meatshopmanager.model.Expense;
 import com.meatshopmanager.model.Receita;
 import com.meatshopmanager.repository.ExpenseRepository;
+import com.meatshopmanager.repository.FuncionarioRepository;
 import com.meatshopmanager.repository.ReceitaRepository;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +35,7 @@ import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -39,10 +44,14 @@ public class DashboardServiceImpl implements DashboardService {
 
     private final ExpenseRepository repository;
     private final ReceitaRepository receitaRepository;
+    private final FuncionarioRepository funcionarioRepository;
 
-    public DashboardServiceImpl(ExpenseRepository repository, ReceitaRepository receitaRepository) {
+    public DashboardServiceImpl(ExpenseRepository repository,
+                                ReceitaRepository receitaRepository,
+                                FuncionarioRepository funcionarioRepository) {
         this.repository = repository;
         this.receitaRepository = receitaRepository;
+        this.funcionarioRepository = funcionarioRepository;
     }
 
     @Override
@@ -72,6 +81,63 @@ public class DashboardServiceImpl implements DashboardService {
         BigDecimal lucro = totalReceitas.subtract(totalDespesas);
 
         return new LucroRealDTO(totalReceitas, totalDespesas, lucro);
+    }
+
+    @Override
+    public ResumoDashboardDTO getResumoDashboard(Integer mes, Integer ano) {
+        int mesAtual = (mes != null) ? mes : LocalDate.now().getMonthValue();
+        int anoAtual = (ano != null) ? ano : LocalDate.now().getYear();
+
+        LocalDate periodoAnterior = LocalDate.of(anoAtual, mesAtual, 1).minusMonths(1);
+        int mesAnt = periodoAnterior.getMonthValue();
+        int anoAnt = periodoAnterior.getYear();
+
+        BigDecimal receitas = orZero(receitaRepository.getSomaReceitasPorPeriodo(mesAtual, anoAtual));
+        BigDecimal despesas = orZero(repository.getSomaDespesasPorPeriodo(mesAtual, anoAtual));
+        BigDecimal lucro = receitas.subtract(despesas);
+        BigDecimal margemLucro = receitas.compareTo(BigDecimal.ZERO) == 0
+                ? BigDecimal.ZERO
+                : lucro.divide(receitas, 4, RoundingMode.HALF_UP)
+                       .multiply(BigDecimal.valueOf(100))
+                       .setScale(2, RoundingMode.HALF_UP);
+
+        BigDecimal receitasAnt = receitaRepository.getSomaReceitasPorPeriodo(mesAnt, anoAnt);
+        BigDecimal despesasAnt = repository.getSomaDespesasPorPeriodo(mesAnt, anoAnt);
+        BigDecimal lucroAnt = (receitasAnt == null && despesasAnt == null) ? null
+                : orZero(receitasAnt).subtract(orZero(despesasAnt));
+
+        long funcionariosAtivos = funcionarioRepository.countByAtivo(true);
+        BigDecimal totalFolha = orZero(funcionarioRepository.getSomaSalariosAtivos());
+
+        List<CategoriaDespesaResumoDTO> top = repository
+                .getTopCategoriasDespesaPorPeriodo(mesAtual, anoAtual, PageRequest.of(0, 1));
+        CategoriaDespesaResumoDTO maiorCategoria = null;
+        if (!top.isEmpty()) {
+            maiorCategoria = top.get(0);
+            BigDecimal valorCatAnt = repository.getSomaDespesasCategoriaPorPeriodo(
+                    maiorCategoria.getNome(), mesAnt, anoAnt);
+            maiorCategoria.setVariacao(calcularVariacao(maiorCategoria.getValor(), valorCatAnt));
+        }
+
+        return new ResumoDashboardDTO(
+                receitas, despesas, lucro, margemLucro,
+                calcularVariacao(receitas, receitasAnt),
+                calcularVariacao(despesas, despesasAnt),
+                calcularVariacao(lucro, lucroAnt),
+                funcionariosAtivos, totalFolha, maiorCategoria
+        );
+    }
+
+    private BigDecimal orZero(BigDecimal value) {
+        return value == null ? BigDecimal.ZERO : value;
+    }
+
+    private BigDecimal calcularVariacao(BigDecimal atual, BigDecimal anterior) {
+        if (anterior == null || anterior.compareTo(BigDecimal.ZERO) == 0) return null;
+        return atual.subtract(anterior)
+                .divide(anterior.abs(), 4, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100))
+                .setScale(2, RoundingMode.HALF_UP);
     }
 
     @Override
