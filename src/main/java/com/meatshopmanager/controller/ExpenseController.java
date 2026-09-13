@@ -25,12 +25,14 @@ public class ExpenseController {
         this.mapper = mapper;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ExpenseDTO> create(@RequestBody ExpenseDTO dto) {
         Expense saved = service.save(mapper.toEntity(dto));
         return ResponseEntity.status(201).body(mapper.toDTO(saved));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','FUNCIONARIO')")
     @GetMapping
     public ResponseEntity<Page<ExpenseDTO>> findAll(
             @RequestParam(required = false) Long categoriaId,
@@ -44,6 +46,7 @@ public class ExpenseController {
         );
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','FUNCIONARIO')")
     @GetMapping("/{id}")
     public ResponseEntity<ExpenseDTO> findById(@PathVariable Long id) {
         Expense expense = service.findById(id);

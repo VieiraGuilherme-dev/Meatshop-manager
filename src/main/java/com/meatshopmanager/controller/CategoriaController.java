@@ -29,6 +29,7 @@ public class CategoriaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(criada);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','FUNCIONARIO')")
     @GetMapping
     public ResponseEntity<Page<CategoriaResponseDTO>> listar(
             @RequestParam(required = false) TipoCategoria tipo,
@@ -36,6 +37,7 @@ public class CategoriaController {
         return ResponseEntity.ok(categoriaService.listarComFiltros(tipo, pageable));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','FUNCIONARIO')")
     @GetMapping("/{id}")
     public ResponseEntity<CategoriaResponseDTO> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(categoriaService.buscarPorId(id));

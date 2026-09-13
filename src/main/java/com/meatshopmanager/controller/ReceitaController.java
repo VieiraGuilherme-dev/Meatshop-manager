@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
-@PreAuthorize("hasRole('ADMIN')")
 @RestController
 @RequestMapping("/api/receitas")
 public class ReceitaController {
@@ -24,12 +23,14 @@ public class ReceitaController {
         this.receitaService = receitaService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ReceitaResponseDTO> criar(@Valid @RequestBody ReceitaRequestDTO dto){
         ReceitaResponseDTO criada = receitaService.criar(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(criada);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','FUNCIONARIO')")
     @GetMapping
     public ResponseEntity<Page<ReceitaResponseDTO>> listar(
             @RequestParam(required = false) Long categoriaId,
@@ -39,17 +40,20 @@ public class ReceitaController {
         return ResponseEntity.ok(receitaService.listarComFiltros(categoriaId, dataInicio, dataFim, pageable));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','FUNCIONARIO')")
     @GetMapping("/{id}")
     public ResponseEntity<ReceitaResponseDTO> buscarPorId(@PathVariable Long id){
         return ResponseEntity.ok(receitaService.buscarPorId(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<ReceitaResponseDTO> atualizar(
             @PathVariable Long id, @Valid @RequestBody ReceitaRequestDTO dto){
         return ResponseEntity.ok(receitaService.atualizar(id, dto));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id){
         receitaService.deletar(id);

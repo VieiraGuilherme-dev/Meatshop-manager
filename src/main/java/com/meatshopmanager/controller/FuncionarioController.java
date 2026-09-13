@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 
-@PreAuthorize("hasRole('ADMIN')")
 @RestController
 @RequestMapping("/api/funcionarios")
 public class FuncionarioController {
@@ -23,12 +22,14 @@ public class FuncionarioController {
         this.funcionarioService = funcionarioService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<FuncionarioResponseDTO> criar(@Valid @RequestBody FuncionarioRequestDTO dto) {
         FuncionarioResponseDTO criado = funcionarioService.criar(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(criado);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','FUNCIONARIO')")
     @GetMapping
     public ResponseEntity<Page<FuncionarioResponseDTO>> listar(
             @RequestParam(required = false) Boolean ativo,
@@ -36,23 +37,27 @@ public class FuncionarioController {
         return ResponseEntity.ok(funcionarioService.listarComFiltros(ativo, pageable));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','FUNCIONARIO')")
     @GetMapping("/{id}")
     public ResponseEntity<FuncionarioResponseDTO> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(funcionarioService.buscarPorId(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<FuncionarioResponseDTO> atualizar(
             @PathVariable Long id, @Valid @RequestBody FuncionarioRequestDTO dto) {
         return ResponseEntity.ok(funcionarioService.atualizar(id, dto));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{id}/demitir")
     public ResponseEntity<FuncionarioResponseDTO> demitir(
             @PathVariable Long id, @Valid @RequestBody DemissaoRequestDTO dto) {
         return ResponseEntity.ok(funcionarioService.demitir(id, dto));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         funcionarioService.deletar(id);

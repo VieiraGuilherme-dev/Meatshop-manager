@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@PreAuthorize("hasRole('ADMIN')")
 @RestController
 @RequestMapping("/api/dashboard")
 @CrossOrigin(origins = "*")
@@ -32,21 +31,25 @@ public class DashboardController {
         this.service = service;
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','FUNCIONARIO')")
     @GetMapping("/total")
     public TotalExpenseDTO totalExpenses(){
         return service.getTotalExpenses();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','FUNCIONARIO')")
     @GetMapping("/by-category")
     public List<ExpenseByCategoryDTO> byCategory(){
         return service.getTotalByCategory();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','FUNCIONARIO')")
     @GetMapping("/by-month")
     public List<ExpenseByMonthDTO> byMonth(){
         return service.getTotalByMonth();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','FUNCIONARIO')")
     @GetMapping("/lucro")
     public LucroRealDTO lucroReal(){
         return service.getLucroReal();
@@ -58,6 +61,7 @@ public class DashboardController {
                       "Sem parâmetros, usa o mês e ano correntes. " +
                       "Variações em relação ao mês anterior são null quando não há dados anteriores."
     )
+    @PreAuthorize("hasAnyRole('ADMIN','FUNCIONARIO')")
     @GetMapping("/resumo")
     public ResponseEntity<ResumoDashboardDTO> resumo(
             @Parameter(description = "Mês (1–12). Padrão: mês atual.")
@@ -67,6 +71,7 @@ public class DashboardController {
         return ResponseEntity.ok(service.getResumoDashboard(mes, ano));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','FUNCIONARIO')")
     @GetMapping("/export/excel")
     public ResponseEntity<ByteArrayResource> exportarExcel(
             @RequestParam(required = false) LocalDate dataInicio,
@@ -81,6 +86,7 @@ public class DashboardController {
                 .body(resource);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','FUNCIONARIO')")
     @GetMapping("/export/pdf")
     public ResponseEntity<ByteArrayResource> exportarPdf(
             @RequestParam(required = false) LocalDate dataInicio,
