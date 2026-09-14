@@ -55,7 +55,9 @@ src/main/java/com/meatshopmanager/
 └── security/     filtro JWT, provider e entry point
 ```
 
-**Por que DTOs em vez de entidades nos controllers.** Expor a entidade acopla o contrato
+**Por que DTOs em vez de entidades nos controllers:** 
+
+Expor a entidade acopla o contrato
 da API ao schema do banco: qualquer mudança em coluna vira mudança de contrato, e campos
 sensíveis vazam por descuido. Com DTOs, entrada e saída são explícitas o
 `FuncionarioRequestDTO` não aceita `id` nem `ativo`, e o `UsuarioResponseDTO` nunca
